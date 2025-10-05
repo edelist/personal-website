@@ -219,47 +219,40 @@
 	/* local validation */
 	$('#contactForm').validate({
 
-		/* submit via ajax */
+		/* submit via mailto */
 		submitHandler: function(form) {
 
 			var sLoader = $('#submit-loader');
-
-			$.ajax({      	
-
-		      type: "POST",
-		      url: "inc/sendEmail.php",
-		      data: $(form).serialize(),
-		      beforeSend: function() { 
-
-		      	sLoader.fadeIn(); 
-
-		      },
-		      success: function(msg) {
-
-	            // Message was sent
-	            if (msg == 'OK') {
-	            	sLoader.fadeOut(); 
-	               $('#message-warning').hide();
-	               $('#contactForm').fadeOut();
-	               $('#message-success').fadeIn();   
-	            }
-	            // There was an error
-	            else {
-	            	sLoader.fadeOut(); 
-	               $('#message-warning').html(msg);
-		            $('#message-warning').fadeIn();
-	            }
-
-		      },
-		      error: function() {
-
-		      	sLoader.fadeOut(); 
-		      	$('#message-warning').html("Something went wrong. Please try again.");
-		         $('#message-warning').fadeIn();
-
-		      }
-
-	      });     		
+			
+			// Get form data
+			var name = $('#contactName').val();
+			var email = $('#contactEmail').val();
+			var subject = $('#contactSubject').val() || 'Contact Form Submission';
+			var message = $('#contactMessage').val();
+			
+			// Create mailto URL
+			var mailtoURL = 'mailto:user@website.com' +
+				'?subject=' + encodeURIComponent(subject) +
+				'&body=' + encodeURIComponent(
+					'Name: ' + name + '\n' +
+					'Email: ' + email + '\n\n' +
+					'Message:\n' + message
+				);
+			
+			sLoader.fadeIn();
+			
+			// Small delay for UX
+			setTimeout(function() {
+				sLoader.fadeOut();
+				
+				// Open mailto link
+				window.location.href = mailtoURL;
+				
+				// Show success message
+				$('#message-warning').hide();
+				$('#contactForm').fadeOut();
+				$('#message-success').fadeIn();
+			}, 1000);
   		}
 
 	});
