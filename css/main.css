@@ -2427,6 +2427,12 @@ header .logo a {
 .contact-info h5 {
 	color: #FF0077;
 }
+.contact-info a, .contact-info a:visited {
+	color: rgba(255, 255, 255, 0.7);
+}
+.contact-info a:hover, .contact-info a:focus {
+	color: #FF0077;
+}
 
 /**
  * loader animation - (_layout.scss)
